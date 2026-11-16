@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mycelium • IRL Game Node Platform</title>
+  <link rel="stylesheet" href="./styles.css?v=0.0.1" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-bar">
+      <div class="brand-cluster">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+          <circle cx="12" cy="5" r="2.5"></circle>
+          <circle cx="5" cy="18" r="2.5"></circle>
+          <circle cx="19" cy="18" r="2.5"></circle>
+          <path d="M12 7.5v4.5m0 0-5.2 4.2M12 12l5.2 4.2"></path>
+        </svg>
+        <h1 class="brand-title">Mycelium</h1>
+        <span class="badge-pill" id="sync-status-badge">Connecting...</span>
+      </div>
+      <div class="icon-actions">
+        <button type="button" class="pill-btn btn-icon" id="btn-theme-toggle" title="Toggle Light/Dark Theme" aria-label="Toggle Light/Dark Theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"></path>
+          </svg>
+        </button>
+        <button type="button" class="pill-btn btn-icon" id="btn-open-firebase" title="Database Settings" aria-label="Database Settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <ellipse cx="12" cy="5" rx="8" ry="3"></ellipse>
+            <path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"></path>
+            <path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Primary Entry Screen -->
+    <main id="view-landing" class="hero-card">
+      <h2 class="hero-title">IRL Game Nodes</h2>
+      <p class="hero-sub">Set up phones, tablets, or laptops once as control points or scoreboards, then run infinite rounds.</p>
+      <div class="cta-stack">
+        <button type="button" class="pill-btn btn-primary" id="btn-open-join">Join Room</button>
+        <button type="button" class="pill-btn btn-secondary" id="btn-open-create">Create Room</button>
+      </div>
+    </main>
+
+    <!-- Active Node Stage -->
+    <main id="view-stage" hidden>
+      <div id="game-mount"></div>
+      <button type="button" class="pill-btn node-gear-fab" id="btn-node-settings" title="Node Settings" aria-label="Node Settings">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+    </main>
+  </div>
+
+  <!-- Join Room Modal -->
+  <div class="modal-backdrop" id="modal-join" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-join-title">
+      <div class="modal-header">
+        <h2 id="modal-join-title">Join Room</h2>
+        <button type="button" class="pill-btn btn-icon" data-close-modal aria-label="Close">&times;</button>
+      </div>
+      <div class="room-list" id="public-rooms-list">
+        <div class="skeleton-box"></div>
+        <div class="skeleton-box"></div>
+      </div>
+      <form id="form-join-room">
+        <div class="field-group">
+          <label for="join-code-input">Room Code</label>
+          <input id="join-code-input" class="text-input" maxlength="6" placeholder="e.g. ABCD" required />
+        </div>
+        <div class="field-group">
+          <label for="join-password-input">Room Password (if required)</label>
+          <input id="join-password-input" type="password" class="text-input" placeholder="Optional" />
+        </div>
+        <button type="submit" class="pill-btn btn-primary" id="btn-submit-join" style="width:100%">Connect Node</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Create Room Modal -->
+  <div class="modal-backdrop" id="modal-create" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-create-title">
+      <div class="modal-header">
+        <h2 id="modal-create-title">Create Room</h2>
+        <button type="button" class="pill-btn btn-icon" data-close-modal aria-label="Close">&times;</button>
+      </div>
+      <form id="form-create-room">
+        <div class="field-group">
+          <label for="create-title-input">Room Title</label>
+          <input id="create-title-input" class="text-input" placeholder="e.g. Gable Thanksgiving" required />
+        </div>
+        <div class="field-group">
+          <label for="create-password-input">Room Password (Optional)</label>
+          <input id="create-password-input" type="password" class="text-input" placeholder="Leave blank for open entry" />
+        </div>
+        <div class="field-group">
+          <label for="create-mode-select">Game Mode</label>
+          <select id="create-mode-select" class="select-input">
+            <option value="koth">King of the Hill (KOTH)</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label for="create-rotation-input">Hill Rotation Timer (seconds)</label>
+          <input id="create-rotation-input" type="number" class="text-input" value="180" min="15" max="3600" />
+        </div>
+        <label class="checkbox-row">
+          <input id="create-public-checkbox" type="checkbox" checked />
+          <span>List in public rooms browser</span>
+        </label>
+        <button type="submit" class="pill-btn btn-primary" id="btn-submit-create" style="width:100%">Create &amp; Configure Node</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Node Role Picker Modal -->
+  <div class="modal-backdrop" id="modal-role" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-role-title">
+      <div class="modal-header">
+        <h2 id="modal-role-title">Configure This Node</h2>
+        <button type="button" class="pill-btn btn-icon" data-close-modal aria-label="Close">&times;</button>
+      </div>
+      <div class="field-group">
+        <label for="node-label-input">Device / Node Name</label>
+        <input id="node-label-input" class="text-input" placeholder="e.g. Hill 1 • Kitchen" />
+      </div>
+      <div class="role-grid">
+        <button type="button" class="pill-btn btn-primary" data-select-role="hill">Hill Control Point</button>
+        <button type="button" class="pill-btn btn-secondary" data-select-role="display-compact">Compact Scoreboard</button>
+        <button type="button" class="pill-btn btn-secondary" data-select-role="display-map">Big Map Display</button>
+        <button type="button" class="pill-btn btn-secondary" id="role-btn-host" data-select-role="host-admin" hidden>Host Admin Console</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Node Settings Modal -->
+  <div class="modal-backdrop" id="modal-node-settings" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-settings-title">
+      <div class="modal-header">
+        <h2 id="modal-settings-title">Node Settings</h2>
+        <button type="button" class="pill-btn btn-icon" data-close-modal aria-label="Close">&times;</button>
+      </div>
+      <div class="role-grid">
+        <button type="button" class="pill-btn btn-secondary" id="settings-fullscreen-btn">Toggle Fullscreen</button>
+        <button type="button" class="pill-btn btn-secondary" id="settings-role-btn">Switch Node Role</button>
+        <button type="button" class="pill-btn btn-secondary" id="settings-host-btn" hidden>Open Host Controls</button>
+        <button type="button" class="pill-btn btn-secondary" id="settings-leave-btn">Leave / Switch Room</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Lockdown Modal (Shown only if LOCKDOWN_ENABLED = true) -->
+  <div class="modal-backdrop" id="modal-lockdown" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-lockdown-title">
+      <div class="modal-header">
+        <h2 id="modal-lockdown-title">Mycelium Access Lock</h2>
+      </div>
+      <p class="hero-sub">Global lockdown is enabled by the developer. Enter your access passphrase once to unlock this device.</p>
+      <form id="form-lockdown">
+        <div class="field-group">
+          <label for="lockdown-pass-input">Access Passphrase</label>
+          <input id="lockdown-pass-input" type="password" class="text-input" required />
+        </div>
+        <button type="submit" class="pill-btn btn-primary" style="width:100%">Unlock Device</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Optional BYO-Firebase Config Modal -->
+  <div class="modal-backdrop" id="modal-firebase" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-fb-title">
+      <div class="modal-header">
+        <h2 id="modal-fb-title">Custom Firebase Config</h2>
+        <button type="button" class="pill-btn btn-icon" data-close-modal aria-label="Close">&times;</button>
+      </div>
+      <p class="muted-hint" style="margin-top:0;margin-bottom:12px">Optional: Paste a Firebase web config JSON object to override default sync, or leave empty to reset.</p>
+      <form id="form-firebase-config">
+        <div class="field-group">
+          <label for="firebase-json-input">Firebase Config JSON</label>
+          <textarea id="firebase-json-input" class="text-input" rows="5" placeholder='{"apiKey":"...","databaseURL":"https://..."}'></textarea>
+        </div>
+        <button type="submit" class="pill-btn btn-primary" style="width:100%">Save &amp; Reload</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast-banner" id="toast-banner" hidden></div>
+  <script type="module" src="./js-app.js?v=0.0.1"></script>
+</body>
+</html>
