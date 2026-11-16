@@ -1,11 +1,11 @@
 /**
  * Mycelium Realtime Sync & Auth Adapter
- * Version: v0.0.1
+ * Version: v0.0.2
  * Supports Firebase Realtime Database (when configured) and zero-setup
  * Local Demo Mode (localStorage + BroadcastChannel) out of the box.
  */
 
-import { APP_META, FIREBASE_CONFIG, STORAGE_KEYS } from './js-config.js?v=0.0.1';
+import { APP_META, FIREBASE_CONFIG, STORAGE_KEYS } from './js-config.js?v=0.0.2';
 
 const DEMO_ROOMS_KEY = 'mycelium_demo_rooms_v1';
 const channel = typeof BroadcastChannel !== 'undefined'

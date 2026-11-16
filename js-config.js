@@ -1,11 +1,11 @@
 /**
  * Mycelium Platform Configuration
- * Version: v0.0.1
+ * Version: v0.0.2
  */
 
 export const APP_META = Object.freeze({
   name: 'Mycelium',
-  version: '0.0.1',
+  version: '0.0.2',
   defaultTheme: 'light',
   roomCodeLength: 4,
   captureHoldMs: 2000
@@ -24,13 +24,13 @@ export const LOCKDOWN_ENABLED = false;
  * Leave apiKey as 'YOUR_API_KEY' to run in local multi-tab Demo Mode.
  */
 export const FIREBASE_CONFIG = Object.freeze({
-  apiKey: 'YOUR_API_KEY',
-  authDomain: 'YOUR_PROJECT.firebaseapp.com',
-  databaseURL: 'https://YOUR_PROJECT-default-rtdb.firebaseio.com',
-  projectId: 'YOUR_PROJECT',
-  storageBucket: 'YOUR_PROJECT.appspot.com',
-  messagingSenderId: '000000000000',
-  appId: '1:000000000000:web:0000000000000000'
+  apiKey: 'AIzaSyCURwXyCjatjk4cV_LG7SbVuQYVr4FOyFo',
+  authDomain: 'mycelium-4b17e.firebaseapp.com',
+  databaseURL: 'https://mycelium-4b17e-default-rtdb.firebaseio.com',
+  projectId: 'mycelium-4b17e',
+  storageBucket: 'mycelium-4b17e.firebasestorage.app',
+  messagingSenderId: '2706846313',
+  appId: '1:2706846313:web:3f70f7b806e21da47428f8'
 });
 
 export const STORAGE_KEYS = Object.freeze({

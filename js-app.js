@@ -1,9 +1,9 @@
 /**
  * Mycelium Main Application Router & UI Controller
- * Version: v0.0.1
+ * Version: v0.0.2
  */
 
-import { APP_META, LOCKDOWN_ENABLED, STORAGE_KEYS } from './js-config.js?v=0.0.1';
+import { APP_META, LOCKDOWN_ENABLED, STORAGE_KEYS } from './js-config.js?v=0.0.2';
 import {
   createRoom,
   getOrCreateHostUid,
@@ -16,7 +16,7 @@ import {
   subscribeRoom,
   syncNodeRole,
   updateGameState
-} from './js-net-sync.js?v=0.0.1';
+} from './js-net-sync.js?v=0.0.2';
 
 const state = {
   roomCode: null,
@@ -170,7 +170,7 @@ async function activateNodeRole(role) {
   closeAllModals();
 
   if (!state.activeGameModule) {
-    state.activeGameModule = await import('./js-game-koth.js?v=0.0.1');
+    state.activeGameModule = await import('./js-game-koth.js?v=0.0.2');
   }
 
   state.activeGameModule.mount($('game-mount'), {

@@ -1,14 +1,14 @@
 /**
  * Mycelium Game Submodule: King of the Hill (KOTH)
- * Version: v0.0.1 (Barebone Scaffold ready for Phase 3 engine expansion)
+ * Version: v0.0.2 (Barebone Scaffold ready for Phase 3 engine expansion)
  */
 
-import { APP_META } from './js-config.js?v=0.0.1';
+import { APP_META } from './js-config.js?v=0.0.2';
 
 export const GAME_META = Object.freeze({
   id: 'koth',
   name: 'King of the Hill',
-  version: '0.0.1'
+  version: '0.0.2'
 });
 
 let container = null;
