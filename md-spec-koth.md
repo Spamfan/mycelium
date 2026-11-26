@@ -1,5 +1,5 @@
 # MYCELIUM — King of the Hill (KOTH) Engine Spec
-### Version: v0.0.1
+### Version: v0.0.2
 ### Target Files: `js-game-koth.js`
 
 ---
@@ -26,3 +26,13 @@ Every Mycelium game plugin exports a standardized interface consumed by `js-app.
   * Displays registered nodes and active/next hill highlights (expandable to custom uploaded field maps in Phase 4).
 * **`host-admin` (Host Control Console):**
   * Displays room code, connected node roster (with each node's current `role` ready for Phase 4 remote role overrides), and Start / Pause / Reset Round controls.
+
+---
+
+### 3. SINGLE-DEVICE LOCAL MODE (`role: 'local'`) & GHOST CONTINUITY
+
+* **Stationary Continuous Hill:** Runs a complete KOTH match on one device without network rooms, logins, or hill rotation (`setup` -> `active` / `paused` -> `finished`).
+* **Controls & Scoring:** Pre-match duration selector (`3m`/`5m`/`10m`/`15m` or custom minutes), 2.0s hold-to-capture (`pointerdown` + `R`/`B` keys) active only when `status === 'active'` and not already owned by that team, 1 pt/sec scoring, and Pause/Resume/Reset/Rematch controls.
+* **Wall-Clock Ghost Continuity (`localStorage` key `mycelium_local_koth_v1`):**
+  * Persists `status`, `durationSec`, `scores`, `hillOwner`, `roundEndsAt`, `lastScoredAt`, and `pausedRemainingMs` on every state change and on `visibilitychange` / `pagehide`.
+  * On mount, tab wake-up, and ticks, reconciles `Math.min(nowMs, roundEndsAt) - lastScoredAt` in whole seconds—awarding elapsed control points to `hillOwner` across refreshes, browser closures, or power loss, and finishing cleanly if `nowMs >= roundEndsAt`.

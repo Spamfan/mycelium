@@ -1,6 +1,6 @@
 # MYCELIUM
 ### IRL Game Node Platform
-### Living Design Document (LDD) V2
+### Living Design Document (LDD) V3
 
 ---
 
@@ -196,13 +196,14 @@ Replace with
 * **4-Way Modal Dismissal:** Close button, backdrop click, `Escape` key, and browser back button/gesture.
 * **History Trapping:** Use `pushState()` on modals and sub-views (`join`, `create`, `role-select`, `node-settings`). `popstate` steps back cleanly without exiting the website.
 * **Subtle Node Settings Trigger:** Active nodes display an unobtrusive corner gear button (`#btn-node-settings`) to open Node Settings (fullscreen toggle, switch node role, host controls, leave room, or host/join a new room) without cluttering gameplay or scoreboard views.
+* **Single-Device Local Launch & Ghost Continuity:** Landing screen features `#btn-open-local` for zero-login, offline-ready single-device KOTH; `boot()` runs `initSync()` non-blockingly and auto-resumes `#view-stage` in `'local'` mode when `mycelium_local_koth_v1` holds an active, paused, or finished match.
 
 ---
 
 ### 5. SYSTEM & ARCHITECTURE CONSTRAINTS
 
 * **Terminology & Lexicon:**
-  * **Required:** `node` (any user-facing device—phone, tablet, laptop, PC—connected to a room), `host` (room creator/controller holding local `hostUid`), `role` (`hill`, `display-compact`, `display-map`, `host-admin`), `room code` (4-character uppercase alphanumeric code), `lockdown` (developer-toggleable SHA-256 access gate).
+  * **Required:** `node` (any user-facing device—phone, tablet, laptop, PC—connected to a room), `host` (room creator/controller holding local `hostUid`), `role` (`hill`, `display-compact`, `display-map`, `host-admin`, `local`), `room code` (4-character uppercase alphanumeric code), `lockdown` (developer-toggleable SHA-256 access gate).
   * **Forbidden:** Hardcoded plaintext passwords or private/admin tokens in public repository files (public Firebase web client config in `js-config.js` is permitted), build/bundler dependencies, or heavy CSS `backdrop-filter: blur()`.
 * **Cache-Busting & Downstream Ripple Mandate:**
   * Buildless ES modules (`<script type="module">`) hosted statically on GitHub Pages (`spamfan.github.io/mycelium`).
@@ -228,17 +229,17 @@ Replace with
 
 #### Version Floor
 *Note: `md-roadmap.md` and `md-spec-*.md` track `v0.x.x` headers for Inbound Check; `md-project.md` tracks integer `V(N)` in its LDD header only.*
-* **App (Mycelium):** `v0.0.1`
-* **`index.html`:** `v0.0.1`
-* **`js-app.js`:** `v0.0.1`
-* **`js-config.js`:** `v0.0.1`
-* **`js-game-koth.js`:** `v0.0.1`
-* **`js-net-sync.js`:** `v0.0.1`
+* **App (Mycelium):** `v0.0.3`
+* **`index.html`:** `v0.0.2`
+* **`js-app.js`:** `v0.0.3`
+* **`js-config.js`:** `v0.0.2`
+* **`js-game-koth.js`:** `v0.0.3`
+* **`js-net-sync.js`:** `v0.0.2`
 * **`md-roadmap.md`:** `v0.0.1`
-* **`md-spec-koth.md`:** `v0.0.1`
+* **`md-spec-koth.md`:** `v0.0.2`
 * **`md-spec-net.md`:** `v0.0.1`
-* **`md-spec-ui.md`:** `v0.0.1`
-* **`styles.css`:** `v0.0.1`
+* **`md-spec-ui.md`:** `v0.0.2`
+* **`styles.css`:** `v0.0.2`
 
 #### File Tree
 * `index.html`

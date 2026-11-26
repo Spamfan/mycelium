@@ -1,4 +1,4 @@
-/* Mycelium Platform Stylesheet — Version: v0.0.1
+/* Mycelium Platform Stylesheet — Version: v0.0.2
  * Outdoor-first Light Mode default, Dark Mode support,
  * Galaxy A03s GPU-safe (zero backdrop-filter blur).
  */
@@ -343,6 +343,7 @@ body {
   font-weight: 900;
   text-align: center;
   letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
   margin: 12px 0 20px;
 }
 
@@ -386,6 +387,7 @@ body {
   display: block;
   font-size: 2.4rem;
   font-weight: 900;
+  font-variant-numeric: tabular-nums;
 }
 
 .hill-owner-banner {
@@ -453,3 +455,10 @@ body {
   font-weight: 600;
   z-index: 80;
 }
+
+.btn-sm { min-height: 38px; padding: 8px 14px; font-size: 0.88rem; }
+.local-toolbar, .local-preset-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.pill-btn.is-selected { background: var(--brand-primary); color: var(--brand-primary-ink); border-color: transparent; }
+.hill-owner-banner.is-red { background: var(--team-red); color: #ffffff; }
+.hill-owner-banner.is-blue { background: var(--team-blue); color: #ffffff; }
+.capture-btn { min-height: 76px; font-size: 1.08rem; touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }

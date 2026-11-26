@@ -1,6 +1,6 @@
 /**
  * Mycelium Main Application Router & UI Controller
- * Version: v0.0.2
+ * Version: v0.0.3
  */
 
 import { APP_META, LOCKDOWN_ENABLED, STORAGE_KEYS } from './js-config.js?v=0.0.2';
@@ -18,7 +18,10 @@ import {
   updateGameState
 } from './js-net-sync.js?v=0.0.2';
 
+const LOCAL_MATCH_KEY = 'mycelium_local_koth_v1';
+
 const state = {
+  isLocalMode: false,
   roomCode: null,
   room: null,
   role: 'unassigned',
@@ -166,11 +169,12 @@ async function activateNodeRole(role) {
     localStorage.setItem(STORAGE_KEYS.nodeLabel, state.nodeLabel);
   }
 
+  state.isLocalMode = false;
   await syncNodeRole(state.roomCode, role, state.nodeLabel);
   closeAllModals();
 
   if (!state.activeGameModule) {
-    state.activeGameModule = await import('./js-game-koth.js?v=0.0.2');
+    state.activeGameModule = await import('./js-game-koth.js?v=0.0.3');
   }
 
   state.activeGameModule.mount($('game-mount'), {
@@ -186,12 +190,48 @@ async function activateNodeRole(role) {
   }, 250);
 }
 
+function hasResumableLocalMatch() {
+  try {
+    const raw = localStorage.getItem(LOCAL_MATCH_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    return Boolean(parsed && (parsed.status === 'active' || parsed.status === 'paused' || parsed.status === 'finished'));
+  } catch (_e) {
+    return false;
+  }
+}
+
+async function launchLocalKoth() {
+  clearInterval(state.tickInterval);
+  if (state.unsubRoom) { state.unsubRoom(); state.unsubRoom = null; }
+  state.isLocalMode = true;
+  state.roomCode = null;
+  state.room = null;
+  state.role = 'local';
+  closeAllModals();
+  $('view-landing').hidden = true;
+  $('view-stage').hidden = false;
+  if (!state.activeGameModule) {
+    state.activeGameModule = await import('./js-game-koth.js?v=0.0.3');
+  }
+  state.activeGameModule.mount($('game-mount'), { role: 'local', nodeLabel: 'Local KOTH', room: null, onExitLocal: exitToLanding });
+  state.tickInterval = setInterval(() => {
+    if (state.activeGameModule) state.activeGameModule.onTick(Date.now());
+  }, 250);
+}
+
 async function exitToLanding() {
+  const wasLocal = state.isLocalMode;
   clearInterval(state.tickInterval);
   if (state.activeGameModule) state.activeGameModule.unmount();
-  if (state.unsubRoom) state.unsubRoom();
-  await leaveRoom(state.roomCode);
+  if (state.unsubRoom) { state.unsubRoom(); state.unsubRoom = null; }
+  if (wasLocal) {
+    localStorage.removeItem(LOCAL_MATCH_KEY);
+  } else {
+    await leaveRoom(state.roomCode);
+  }
 
+  state.isLocalMode = false;
   state.roomCode = null;
   state.room = null;
   state.role = 'unassigned';
@@ -203,6 +243,7 @@ async function exitToLanding() {
 
 function bindEvents() {
   $('btn-theme-toggle')?.addEventListener('click', toggleTheme);
+  $('btn-open-local')?.addEventListener('click', launchLocalKoth);
 
   $('btn-open-join')?.addEventListener('click', () => {
     openModal('modal-join');
@@ -214,8 +255,10 @@ function bindEvents() {
   $('btn-open-create')?.addEventListener('click', () => openModal('modal-create'));
   $('btn-open-firebase')?.addEventListener('click', () => openModal('modal-firebase'));
   $('btn-node-settings')?.addEventListener('click', () => {
-    const isHost = state.room?.meta?.hostUid === getOrCreateHostUid();
+    const isHost = !state.isLocalMode && state.room?.meta?.hostUid === getOrCreateHostUid();
+    $('settings-role-btn').hidden = state.isLocalMode;
     $('settings-host-btn').hidden = !isHost;
+    $('settings-leave-btn').textContent = state.isLocalMode ? 'End Local Match & Exit' : 'Leave / Switch Room';
     openModal('modal-node-settings');
   });
 
@@ -344,14 +387,20 @@ async function boot() {
   const labelInput = $('node-label-input');
   if (labelInput) labelInput.value = state.nodeLabel;
 
-  const syncInfo = await initSync();
-  if (syncInfo.mode === 'firebase' && !isDemoMode()) {
-    setStatusBadge('Firebase Live', true);
-  } else {
-    setStatusBadge('Local Demo Mode', false);
-  }
+  initSync()
+    .then((syncInfo) => {
+      if (syncInfo.mode === 'firebase' && !isDemoMode()) {
+        setStatusBadge('Firebase Live', true);
+      } else {
+        setStatusBadge('Local Demo Mode', false);
+      }
+    })
+    .catch(() => setStatusBadge('Offline / Local Ready', false));
 
-  if (isLockdownBlocking()) {
+  const resumingLocal = hasResumableLocalMatch();
+  if (resumingLocal) {
+    await launchLocalKoth();
+  } else if (isLockdownBlocking()) {
     $('modal-lockdown').hidden = false;
   }
 }

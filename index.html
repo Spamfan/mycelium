@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mycelium • IRL Game Node Platform</title>
-  <link rel="stylesheet" href="./styles.css?v=0.0.1" />
+  <link rel="stylesheet" href="./styles.css?v=0.0.2" />
 </head>
 <body>
   <div class="app-shell">
@@ -41,7 +41,8 @@
       <h2 class="hero-title">IRL Game Nodes</h2>
       <p class="hero-sub">Set up phones, tablets, or laptops once as control points or scoreboards, then run infinite rounds.</p>
       <div class="cta-stack">
-        <button type="button" class="pill-btn btn-primary" id="btn-open-join">Join Room</button>
+        <button type="button" class="pill-btn btn-primary" id="btn-open-local">Play Local KOTH (1 Device)</button>
+        <button type="button" class="pill-btn btn-secondary" id="btn-open-join">Join Room</button>
         <button type="button" class="pill-btn btn-secondary" id="btn-open-create">Create Room</button>
       </div>
     </main>
@@ -190,6 +191,6 @@
   </div>
 
   <div class="toast-banner" id="toast-banner" hidden></div>
-  <script type="module" src="./js-app.js?v=0.0.2"></script>
+  <script type="module" src="./js-app.js?v=0.0.3"></script>
 </body>
 </html>
