@@ -1,6 +1,6 @@
 # MYCELIUM
 ### IRL Game Node Platform
-### Living Design Document (LDD) V3
+### Living Design Document (LDD) V4
 
 ---
 
@@ -235,7 +235,7 @@ Replace with
 * **`js-config.js`:** `v0.0.2`
 * **`js-game-koth.js`:** `v0.0.3`
 * **`js-net-sync.js`:** `v0.0.2`
-* **`md-roadmap.md`:** `v0.0.1`
+* **`md-roadmap.md`:** `v0.0.2`
 * **`md-spec-koth.md`:** `v0.0.2`
 * **`md-spec-net.md`:** `v0.0.1`
 * **`md-spec-ui.md`:** `v0.0.2`

@@ -1,5 +1,5 @@
 # MYCELIUM — Project Roadmap & Handoff Guide
-### Version: v0.0.1
+### Version: v0.0.2
 
 ---
 
@@ -14,9 +14,9 @@
 
 ---
 
-### 2. CURRENT BASELINE STATE (`v0.0.1` — Barebone Framework)
+### 2. CURRENT BASELINE STATE (`v0.0.2` — Local Single-Device KOTH + Network Scaffold)
 
-This baseline establishes the complete modular architecture, design system, and entry UX flow before full Firebase RTDB wiring and game loop logic:
+In addition to the modular UI shell and Firebase RTDB/demo scaffold, the platform now includes a playable **Single-Device Local KOTH** quick-launch mode (`#btn-open-local`, `role: 'local'`) with zero-login offline boot and `localStorage` wall-clock ghost continuity (`mycelium_local_koth_v1`). The rest of the networked baseline establishes:
 * **Alphabetical Format-Prefixed File Tree:** All files use format prefixes (`js-*.js`, `md-*.md`, except `index.html` and `styles.css`) for tidy repository organization.
 * **Complete Entry UX Flow:**
   1. **Optional Global Lockdown Gate:** Appears only when `LOCKDOWN_ENABLED` is set to `true` in `js-config.js` (default `false`).
@@ -56,8 +56,10 @@ This baseline establishes the complete modular architecture, design system, and 
 
 ### 4. PHASED DEVELOPMENT ROADMAP
 
-* **Phase 1 — `v0.0.1` (Current Baseline):**
-  * Modular file architecture, Living Design Document (`md-project.md`), subsystem specs (`md-spec-*.md`), roadmap (`md-roadmap.md`), responsive Light/Dark UI shell, Join/Create/Lockdown UX flows, Node Role Picker, and barebone sync/KOTH stubs.
+* **Phase 1 — `v0.0.1` (Initial Baseline):**
+  * Modular file architecture, Living Design Document (`md-project-mycelium.md`), subsystem specs (`md-spec-*.md`), roadmap (`md-roadmap.md`), responsive Light/Dark UI shell, Join/Create/Lockdown UX flows, Node Role Picker, and barebone sync/KOTH stubs.
+* **Phase 1.5 — `v0.0.2–v0.0.3` (Current — Single-Device Local KOTH Fast-Track):**
+  * Playable 1-device stationary KOTH mode (`#btn-open-local`) with match timer, 2.0s hold-to-capture, Pause/Resume/Reset/Rematch, non-blocking `initSync()`, and `localStorage` ghost continuity across refreshes/power loss.
 * **Phase 2 — `v0.1.x` (Live Firebase RTDB Wiring & Security Rules):**
   * Configure live Firebase web app credentials in `js-config.js` (plus optional BYO-Firebase settings modal).
   * Deploy Firebase RTDB Security Rules (`rooms/$roomCode`, `publicRooms/$roomCode`, `hostUid` write enforcement, optional room password hash check, optional global lockdown hash check).
